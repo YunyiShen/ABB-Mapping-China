@@ -1,0 +1,52 @@
+An object of class "BIOMOD.stored.array"
+Slot "val":
+, , RF, RUN1, AllData
+
+    Testing.data Cutoff Sensitivity Specificity
+TSS            1    593         100         100
+ROC            1    594         100         100
+
+, , RF, Full, AllData
+
+    Testing.data Cutoff Sensitivity Specificity
+TSS        0.981    422         100      98.113
+ROC        0.999    418         100      98.113
+
+
+Slot "inMemory":
+[1] TRUE
+
+Slot "link":
+[1] "bear/.BIOMOD_DATA/1541112992/models.evaluation"
+
+
+An object of class "BIOMOD.stored.array"
+Slot "val":
+, , RUN1, AllData
+
+                 RF
+conservation  0.006
+CHELSA_bio_1  0.154
+CHELSA_bio_12 0.072
+dem           0.071
+demstd        0.122
+population    0.028
+tree          0.141
+
+, , Full, AllData
+
+                 RF
+conservation  0.009
+CHELSA_bio_1  0.110
+CHELSA_bio_12 0.128
+dem           0.057
+demstd        0.120
+population    0.016
+tree          0.104
+
+
+Slot "inMemory":
+[1] TRUE
+
+Slot "link":
+[1] "bear/.BIOMOD_DATA/1541112992/variables.importance"

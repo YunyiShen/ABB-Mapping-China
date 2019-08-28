@@ -1,0 +1,57 @@
+SDM.1 <-
+  BIOMOD_Modeling(
+    data = distributiondata.species1,
+    models = 'RF',
+    DataSplit=85,
+    models.eval.meth = c('TSS', 'ROC') ,
+    VarImport = 3,
+    SaveObj = T
+  )
+
+An object of class "BIOMOD.stored.array"
+Slot "val":
+, , RF, RUN1, AllData
+
+    Testing.data Cutoff Sensitivity Specificity
+TSS            1    747         100         100
+ROC            1    747         100         100
+
+, , RF, Full, AllData
+
+    Testing.data Cutoff Sensitivity Specificity
+TSS         0.99    333         100       99.02
+ROC         1.00    335         100       99.02
+
+
+Slot "inMemory":
+[1] TRUE
+
+Slot "link":
+[1] "bear/.BIOMOD_DATA/1541105761/models.evaluation"
+
+An object of class "BIOMOD.stored.array"
+Slot "val":
+, , RUN1, AllData
+
+                RF
+conservation 0.023
+dem          0.046
+demstd       0.127
+population   0.277
+tree         0.088
+
+, , Full, AllData
+
+                RF
+conservation 0.027
+dem          0.043
+demstd       0.127
+population   0.338
+tree         0.085
+
+
+Slot "inMemory":
+[1] TRUE
+
+Slot "link":
+[1] "bear/.BIOMOD_DATA/1541105761/variables.importance"
