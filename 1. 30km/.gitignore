@@ -1,0 +1,14 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.tif
+*.dbf
+*.prj
+*.sbx
+*.shp
+*.xml
+*.sbn
+*.cpg
+*.shx
+/bear/
