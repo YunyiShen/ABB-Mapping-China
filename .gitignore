@@ -2,7 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-*.tif
 *.dbf
 *.prj
 *.sbx
@@ -11,3 +10,4 @@
 *.sbn
 *.cpg
 *.shx
+/zz.origin_rasters/*

@@ -11,4 +11,5 @@
 *.sbn
 *.cpg
 *.shx
-/bear/
+/bear/*
+/rasters/*
