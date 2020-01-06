@@ -49,7 +49,7 @@ distribution.est.1.full <- BIOMOD_Projection(SDM.1, my.stack, 'distribution1.est
 plot(distribution.est.1.full)
 distribution.est.1 <- distribution.est.1.full@proj@val[[2]]
 plot(distribution.est.1)
-writeRaster(distribution.est.1,paste0((getwd()),"bear7_9.tif"),overwrite=T)
+writeRaster(distribution.est.1,paste0((getwd()),"bear7_19.tif"),overwrite=T)
 summary(SDM.1)
 
 stack.all = stack(distribution.est.1,my.stack)
