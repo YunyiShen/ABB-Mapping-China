@@ -22,7 +22,7 @@ for(i in 1:1){
 
 stack2 <- stack(rasters_con)
 my.stack <- stack(stack1,stack2)
-my.stack = my.stack[[-2]]
+#my.stack = my.stack[[-2]]
 #my.stack = my.stack[[-3]]
 
 set.seed(114514)
@@ -87,5 +87,34 @@ average_pred = lapply(res,function(w){w$prediction_low})
 average_pred = Reduce(mean,average_pred)
 
 
-writeRaster(distribution.est.1,paste0((getwd()),"/high/bear_1.12_average.tif"),overwrite=T)
+writeRaster(distribution.est.1,paste0((getwd()),"/high/bear_average.tif"),overwrite=T)
+
+
+
+
+
+var_importance = lapply(res,function(w){slot(w$model_high@variables.importances,"val")})
+
+
+var_importance_matrix = Reduce(rbind,var_importance)
+
+colnames(var_importance_matrix) = c("PRO","ELE","RUG","POP","VEG")
+row.names(var_importance_matrix) = paste0("fold_",1:fold)
+
+write.csv(var_importance_matrix,"var_importance.csv")
+
+
+require(ggplot2)
+
+require(reshape2)
+
+var_im = melt(var_importance_matrix,varnames = c("fold","predictor"))
+
+ggplot(data = var_im,aes(x=predictor,y=value)) + 
+  geom_boxplot()+   
+  theme(text = element_text(size=14), 
+        axis.text.x = element_text(angle=45, hjust=1,size = 12))
+
+ggsave("importance.jpg",dpi=500)
+
 

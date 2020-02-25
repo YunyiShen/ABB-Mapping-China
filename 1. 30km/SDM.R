@@ -1,6 +1,6 @@
 workdir <- "/1. 30km"
 setwd(paste0(getwd(),workdir))
-allPA <- read.csv(list.files(pattern = ".csv$")[3])
+allPA <- read.csv(list.files(pattern = "training.+?csv$"))
 
 
 
@@ -69,7 +69,7 @@ for(i in 1:fold){
 		jpeg(filename=paste0("bear","_fold_",i,".jpg"))
 		plot(distribution.est.1)
 		dev.off()
-		writeRaster(distribution.est.1,paste0((getwd()),"/low/bear_1.12_fold_",i,".tif"),overwrite=T)
+		writeRaster(distribution.est.1,paste0((getwd()),"/low/bear_fold_",i,".tif"),overwrite=T)
 		#distribution.est.1 = raster(file.choose())
 		
 		prediction_on_test = extract(distribution.est.1,allPA[folds[[i]],3:4])/1000
@@ -97,6 +97,32 @@ average_pred = lapply(res,function(w){w$prediction_low})
 
 average_pred = Reduce(mean,average_pred)
 
+jpeg(filename=paste0("bear_average.jpg"))
+plot(average_pred)
+dev.off()
+writeRaster(distribution.est.1,paste0((getwd()),"/low/bear_average.tif"),overwrite=T)
 
-writeRaster(distribution.est.1,paste0((getwd()),"/low/bear_1.12_average.tif"),overwrite=T)
 
+var_importance = lapply(res,function(w){slot(w$model_high@variables.importances,"val")})
+
+
+var_importance_matrix = Reduce(rbind,var_importance)
+
+colnames(var_importance_matrix) = c("PRO","BIO1","BIO12","BIO15","BIO2","BIO3","BIO4","ELE","RUG","POP","VEG")
+row.names(var_importance_matrix) = paste0("fold_",1:fold)
+
+write.csv(var_importance_matrix,"var_importance.csv")
+
+
+require(ggplot2)
+
+require(reshape2)
+
+var_im = melt(var_importance_matrix,varnames = c("fold","predictor"))
+
+ggplot(data = var_im,aes(x=predictor,y=value)) + 
+  geom_boxplot()+   
+  theme(text = element_text(size=14), 
+        axis.text.x = element_text(angle=45, hjust=1,size = 12))
+
+ggsave("importance.jpg",dpi=500)

@@ -22,7 +22,7 @@ for(i in 1:fold){
   plot(fusion_temp)
   dev.off()
   
-  writeRaster(fusion_temp,paste0(Fusion,"/bear","_fold_",i,"fusion.tif"))
+  writeRaster(fusion_temp,paste0(Fusion,"/bear","_fold_",i,"fusion.tif"),overwrite=T)
   
 }
 
@@ -31,10 +31,10 @@ all_temp = stack(list.files(Fusion,pattern=".tif$",full.names = T))
 
 mean_prod = mean(all_temp)
 
-writeRaster(mean_prod,paste0(Fusion,"/bear_mean.tif"))
+writeRaster(mean_prod,paste0(Fusion,"/bear_mean.tif"),overwrite=T)
 
-jpeg(filename=paste0(Fusion,"/bear_mean_fusion_0.3.jpg"))
-plot(mean_prod>0.3)
+jpeg(filename=paste0(Fusion,"/bear_mean_fusion.jpg"))
+plot(mean_prod)
 dev.off()
 
 

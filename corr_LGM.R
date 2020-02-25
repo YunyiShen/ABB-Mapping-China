@@ -15,16 +15,17 @@ for (i in 1:18){
 }
 
 write.csv(cvar,paste0(rasterdir,'/correlation_LGM.csv'),row.names = F)
-cvar = read.csv('correlation_LGM.csv')
+cvar = read.csv('cormat_BIOCLIM.csv')
 absvar = (cvar)
-absvar[,3:20] = abs(absvar[,3:20])
+#absvar[,3:20] = abs(absvar[,3:20])
 deletevar = absvar
-deletevar[,3:20] = absvar[,3:20]>=0.7
+#deletevar[,3:20] = absvar[,3:20]>=0.7
+deletevar = absvar>=0.7
 
-corrmatrix = deletevar[,2:20]
-layers = deletevar[,1]
+corrmatrix = deletevar
+layers = colnames(absvar)
 still = T
-
+diag(corrmatrix) = FALSE
 while(still){
   numdel = matrix(1,nrow(corrmatrix))
   for(i in 1:nrow(corrmatrix)){
@@ -36,11 +37,13 @@ while(still){
   print(corrmatrix)
   print(as.character(layers[vartodelete]))
   print(numdel)
-  layers = layers[-vartodelete]
-  corrmatrix = corrmatrix[-vartodelete,]
-  corrmatrix = corrmatrix[,-vartodelete]
+  
+  correlatedwith = corrmatrix[vartodelete,]
   
   
+  layers = layers[!correlatedwith]
+  corrmatrix = corrmatrix[!correlatedwith,!correlatedwith]
+  #corrmatrix = corrmatrix[,correlatedwith]
   
 }
 write.csv(as.character(layers),'layers.notre.csv')
