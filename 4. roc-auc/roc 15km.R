@@ -3,7 +3,7 @@ require(raster)
 
 
 rocdata=read.csv('./data/ROCfinal15km.csv')
-rocdata = rocdata[rocdata$Field4=="Sichuan",]
+rocdata = rocdata[rocdata$Field4!="Sichuan",]
 
 
 prediction_low=raster("./bear_mean_coarse.tif")
