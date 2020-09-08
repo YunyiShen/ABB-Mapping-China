@@ -6,7 +6,9 @@ library (rgdal)
 library (rgeos)
 library(maptools)
 library(tmap)
-
+library(extrafont)
+font_import()
+loadfonts()
 
 map_30 <- raster("./1. 30km/res_map/bear_average.tif")
 map_10 <- raster("./3. fusion/Fusion/bear_mean.tif")
@@ -22,7 +24,7 @@ gplot(map_stack) +
                       high =  "#E7B800",
                       na.value="transparent") +
   labs(fill = "Probability", x = "", y="") +
-  theme(text = element_text(size=14), 
+  theme(text = element_text(size=14,family = "Times New Roman"), 
         axis.text.x = element_text(angle=-45,size = 12,vjust=1,hjust = 0),
         axis.text.y = element_text(angle=0,size = 12),
         plot.margin = margin(.15, .15, .15, .15, "cm"))+
@@ -35,7 +37,8 @@ gplot(map_stack) +
   ggsn::scalebar(x.min = -2638293 , x.max = 1906197 , 
                  y.min = 665715.9 , y.max = 5921292, 
                  dist = 1000,dist_unit = "km", transform = F,
-                 location = "bottomright",border.size = .1, st.dist = .05)+
+                 location = "bottomright",border.size = .1, st.dist = .05,
+                 family = "Times New Roman")+
   ggsn::north(x.min = -2638293 , x.max = 2206197 , 
               y.min = 665715.9 , y.max = 5921292,
               location = "topleft",scale = .1, symbol = 15)+
@@ -65,7 +68,7 @@ g <- gplot(binary_map) +
                       na.value="transparent") + 
   guides(fill=FALSE)+
   labs(x = "", y="") +
-  theme(text = element_text(size=14), 
+  theme(text = element_text(size=14,family = "Times New Roman"), 
         axis.text.x = element_text(angle=-45,size = 12,vjust=1,hjust = 0),
         axis.text.y = element_text(angle=0,size = 12),
         plot.margin = margin(.15, .15, .15, .15, "cm"))+
@@ -78,7 +81,7 @@ g <- gplot(binary_map) +
   ggsn::scalebar(x.min = -2638293 , x.max = 1906197 , 
                  y.min = 665715.9 , y.max = 5921292, 
                  dist = 1000,dist_unit = "km", transform = F,
-                 location = "bottomright",border.size = .1, st.dist = .05)+
+                 location = "bottomright",border.size = .1, st.dist = .05,family = "Times New Roman")+
   ggsn::north(x.min = -2638293 , x.max = 2206197 , 
               y.min = 665715.9 , y.max = 5921292,
               location = "topleft",scale = .1, symbol = 15)
@@ -88,21 +91,21 @@ for(i in 1:8){
 }  
 
 g + annotate(geom="text", x=1.78e6, y=2.55e6, label="1",
-             color="black")+
+             color="black",family = "Times New Roman")+
   annotate(geom="text", x=.5e6, y=1.7e6, label="2",
-             color="black") + 
+             color="black",family = "Times New Roman") + 
   annotate(geom="text", x=1.65e6, y=4.7e6, label="3",
-           color="black")  +
+           color="black",family = "Times New Roman")  +
   annotate(geom="text", x=1.2e6, y=2.75e6, label="4",
-           color="black") +   
+           color="black",family = "Times New Roman") +   
   annotate(geom="text", x=.2e6, y=2.75e6, label="5",
-           color="black") +
+           color="black",family = "Times New Roman") +
   annotate(geom="text", x=.25e6, y=3.4e6, label="6",
-           color="black") +
+           color="black",family = "Times New Roman") +
   annotate(geom="text", x=0e6, y=3.25e6, label="7",
-           color="black") +
+           color="black",family = "Times New Roman") +
   annotate(geom="text", x=-.8e6, y=3.2e6, label="8",
-           color="black")
+           color="black",family = "Times New Roman")
 
 ggsave("./7.make_figs/unit_maps.tiff",width = 6, height = 5,dpi = 500)
 ggsave("./7.make_figs/unit_maps.jpg",width = 6, height = 5,dpi = 600)
