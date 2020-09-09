@@ -80,18 +80,21 @@ g <- gplot(binary_map) +
     legend.background = element_rect(fill = "transparent")#, # get rid of legend bg
     #legend.box.background = element_rect(fill = "transparent") # get rid of legend panel bg
   )+
-  ggsn::scalebar(x.min = -2638293 , x.max = 1906197 , 
+  ggsn::scalebar(x.min = -2638293 , x.max = 1906197 , # scalebar
                  y.min = 665715.9 , y.max = 5921292, 
                  dist = 1000,dist_unit = "km", transform = F,
                  location = "bottomright",border.size = .1, st.dist = .05,family = "Times New Roman")+
-  ggsn::north(x.min = -2638293 , x.max = 2206197 , 
+  ggsn::north(x.min = -2638293 , x.max = 2206197 ,  # north
               y.min = 665715.9 , y.max = 5921292,
               location = "topleft",scale = .1, symbol = 15)
 
+# add polygon
 for(i in 1:8){
   g <- g + geom_polygon(data=management_units_df[[i]], aes(long, lat, group=id),color = "black",fill = NA)
 }  
 
+
+# not good, annotate the polygon
 g + annotate(geom="text", x=1.78e6, y=2.55e6, label="1",
              color="black",family = "Times New Roman")+
   annotate(geom="text", x=.5e6, y=1.7e6, label="2",

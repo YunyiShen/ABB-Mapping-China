@@ -25,26 +25,49 @@ ggplot_add.new_aes <- function(object, plot, object_name) {
 
 loadfonts()
 map_10 <- raster("./3. fusion/Fusion/bear_mean.tif")
-
+namesss <- c("Extend","Possible","")
 IUCN_polygon <- rgdal::readOGR("./8.IUCN/ABB_IUCN.shp")
 IUCN_polygon_tras <- spTransform(IUCN_polygon,map_10@crs)
 IUCN_polygon_fort <- fortify(IUCN_polygon_tras)
+IUCN_polygon_fort$id[IUCN_polygon_fort$hole] <- 2
+IUCN_polygon_fort$id <- as.numeric(IUCN_polygon_fort$id) + 1
+IUCN_polygon_fort$IUCN <- factor(namesss[IUCN_polygon_fort$id],levels = namesss)
 
 
 binary_map <- raster("./3. fusion/Fusion/binary_0.39.tif")
 binary_map <- ratify( asFactor(binary_map))
 
+PA_name <- c("A","P")
+
+points_coarse <- read.csv("./1. 30km/training data points.csv",row.names = 1)
+points_coarse <- points_coarse[,c(2,3,4)]
+points_coarse$P.A <- PA_name[points_coarse$P.A+1]
+points_coarse$res <- "coarse"
+points_coarse$source <- paste(points_coarse$res,points_coarse$P.A,sep = "-")
+points_coarse <- points_coarse[,-5]
+colnames(points_coarse) <- c("X","Y","P.A.","data.type")
+
+points_fine <- read.csv("./2. 3.16km/afterthinnerandchoosing.csv",row.names = 1)
+points_fine$R <- PA_name[points_fine$R+1]
+points_fine$res <- "fine"
+points_fine$source <- paste(points_fine$res,points_fine$R,sep = "-")
+points_fine <- points_fine[,c(2,3,4,7)]
+colnames(points_fine) <- colnames(points_coarse)
+
+points_all <- rbind(points_coarse,points_fine)
+
+
 gplot(binary_map) + 
-  geom_tile(aes(fill = value)) + 
+  geom_tile(aes(fill = value),show.legend = FALSE ) + 
   scale_fill_gradient(high = "#0072B2",
                       low =  "lightgrey",
                       na.value="transparent") + 
   #scale_fill_gradient(low = "#0072B2",
   #                    high =  "#E7B800",
   #                    na.value="transparent") +
-  guides(fill=FALSE)+
+  #guides(fill=FALSE)+
   labs(x = "", y="") +
-  theme(text = element_text(size=14,family = "Times New Roman"), 
+  theme(text = element_text(size=12,family = "Times New Roman"), 
         axis.text.x = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks = element_blank(),
@@ -52,7 +75,8 @@ gplot(binary_map) +
   theme(
     panel.background = element_rect(fill = "transparent"), # bg of the panel
     plot.background = element_rect(fill = "transparent", color = NA), # bg of the plot
-    legend.background = element_rect(fill = "transparent")#, # get rid of legend bg
+    legend.background = element_rect(fill = "transparent",color = NA),#, # get rid of legend bg
+    legend.key = element_rect(fill = "transparent")
     #legend.box.background = element_rect(fill = "transparent") # get rid of legend panel bg
   )+
   ggsn::scalebar(x.min = -2638293 , x.max = 1906197 , 
@@ -63,8 +87,14 @@ gplot(binary_map) +
               y.min = 665715.9 , y.max = 5921292,
               location = "topleft",scale = .1, symbol = 15) + 
   new_scale("fill") +
+  #ggplot()+geom_polygon(data = datapoly, aes(x= x, y = y, fill = value, group = id, subgroup = subid))
   geom_polygon(data=IUCN_polygon_fort, 
-               aes(long, lat, group=group,subgroup = as.factor(hole),fill = as.numeric(id)),alpha = .8)
-#  geom_sf(data=IUCN_polygon_fort,aes(long, lat, group=group,subgroup = as.factor(hole)))
+               aes(long, lat, group=group,subgroup = factor(hole),fill = IUCN),alpha = .35) + 
+  scale_fill_manual(values = c("#E69F00", "#009E73",adjustcolor("white",alpha.f = 0))) + 
+  new_scale("color") +
+  geom_point(data = points_all,mapping = aes(x = X, y = Y, color = data.type,shape = data.type),size = 1.5) + 
+  scale_color_manual(values = c("#E69F00", "#CC79A7","#009E73" ,"#D55E00"))
+
+ggsave("./7.make_figs/IUCN_points.jpg",width = 7,height = 4,unit = "in",dpi = 600)
 
 

@@ -1,6 +1,6 @@
 workdir <- "/2. 3.16km"
 setwd(paste0(getwd(),workdir))
-allPA <- read.csv(list.files(pattern = ".csv$")[2])
+allPA <- read.csv(list.files(pattern = ".csv$")[2]) # "afterthinnerandchoosing.csv"
 
 require(raster)
 require(biomod2)
