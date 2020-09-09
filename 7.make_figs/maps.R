@@ -25,8 +25,9 @@ gplot(map_stack) +
                       na.value="transparent") +
   labs(fill = "Probability", x = "", y="") +
   theme(text = element_text(size=14,family = "Times New Roman"), 
-        axis.text.x = element_text(angle=-45,size = 12,vjust=1,hjust = 0),
-        axis.text.y = element_text(angle=0,size = 12),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
         plot.margin = margin(.15, .15, .15, .15, "cm"))+
   theme(
     panel.background = element_rect(fill = "transparent"), # bg of the panel
@@ -46,7 +47,7 @@ gplot(map_stack) +
 
   
 ggsave("./7.make_figs/prob_maps.tiff",width = 10, height = 5.5,dpi = 500)
-ggsave("./7.make_figs/prob_maps.jpg",width = 10, height = 5.5,dpi = 600)
+ggsave("./7.make_figs/prob_maps.jpg",width = 10, height = 5.5,dpi = 800)
 
 
 
@@ -69,8 +70,9 @@ g <- gplot(binary_map) +
   guides(fill=FALSE)+
   labs(x = "", y="") +
   theme(text = element_text(size=14,family = "Times New Roman"), 
-        axis.text.x = element_text(angle=-45,size = 12,vjust=1,hjust = 0),
-        axis.text.y = element_text(angle=0,size = 12),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
         plot.margin = margin(.15, .15, .15, .15, "cm"))+
   theme(
     panel.background = element_rect(fill = "transparent"), # bg of the panel
@@ -108,4 +110,4 @@ g + annotate(geom="text", x=1.78e6, y=2.55e6, label="1",
            color="black",family = "Times New Roman")
 
 ggsave("./7.make_figs/unit_maps.tiff",width = 6, height = 5,dpi = 500)
-ggsave("./7.make_figs/unit_maps.jpg",width = 6, height = 5,dpi = 600)
+ggsave("./7.make_figs/unit_maps.jpg",width = 4.5, height = 5,dpi = 1000)
