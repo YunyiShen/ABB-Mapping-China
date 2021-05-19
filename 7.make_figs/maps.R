@@ -97,9 +97,11 @@ gplot(map_stack) +
   coord_equal()
 
   
-ggsave("./7.make_figs/prob_maps_IUCN.tiff",width = 10, height = 5.5,dpi = 500)
-ggsave("./7.make_figs/prob_maps_IUCN.jpg",width = 10, height = 5.5,dpi = 800)
+ggsave("./7.make_figs/prob_maps.tiff",width = 10, height = 5.5,dpi = 500)
+ggsave("./7.make_figs/prob_maps.jpg",width = 10, height = 5.5,dpi = 800)
 
+ggsave("./7.make_figs/prob_maps_IUCN.tiff",width = 12, height = 5.5,dpi = 500)
+ggsave("./7.make_figs/prob_maps_IUCN.jpg",width = 12, height = 5.5,dpi = 800)
 
 
 binary_map <- raster("./3. fusion/Fusion/binary_0.39.tif")
