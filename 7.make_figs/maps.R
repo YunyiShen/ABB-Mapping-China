@@ -9,7 +9,29 @@ library(tmap)
 library(extrafont)
 library(ggnewscale)
 font_import()
+y
 loadfonts()
+
+t_col <- function(color, percent = 0, name = NULL) {
+  #      color = color name
+  #    percent = % transparency
+  #       name = an optional name for the color
+  
+  ## Get RGB values for named color
+  rgb.val <- col2rgb(color)
+  
+  ## Make new color using input color as base and alpha set by transparency
+  t.col <- rgb(rgb.val[1], rgb.val[2], rgb.val[3],
+               max = 255,
+               alpha = (100 - percent)*255  / 100,
+               names = name)
+  
+  ## Save the color
+  invisible(t.col)
+  t.col
+}
+
+
 
 map_30 <- raster("./1. 30km/res_map/bear_average.tif")
 map_10 <- raster("./3. fusion/Fusion/bear_mean.tif")
@@ -30,16 +52,27 @@ IUCN_polygon_fort$IUCN <- factor(namesss[IUCN_polygon_fort$id],levels = namesss)
 map_stack <- stack(map_30_res,map_10)
 names(map_stack) <- c("coarse","integrated")
 
+# this will take sichuan out from the polygon
+Sichuan <- !(IUCN_polygon_fort$IUCN=="Extend" & !IUCN_polygon_fort$hole) & IUCN_polygon_fort$IUCN!="Possible"
+
 gplot(map_stack) +
   geom_tile(aes(fill = value)) +
   scale_fill_gradient(low = "#0072B2",
                       high =  "#E7B800",
+                      #low="gray",
                       na.value="transparent") +
   labs(fill = "Probability", x = "", y="") +
   new_scale("fill") +
-  geom_polygon(data=IUCN_polygon_fort, 
-               aes(long, lat, group=group,subgroup = factor(hole),fill = IUCN),alpha = .35) +
-  scale_fill_manual(values = c("#E69F00", "#009E73",adjustcolor("white",alpha.f = 0))) + 
+  geom_polygon(data=IUCN_polygon_fort[!Sichuan,], 
+               aes(long, lat, group=group,subgroup = factor(hole),fill = IUCN)) +
+  scale_fill_manual(values = c(#t_col("#E69F00",80),
+                                t_col("red", 70),
+                               #t_col("#009E73", 80), 
+                               t_col("seagreen2", 70),
+                               t_col("white", 100)
+                               #"white"
+                               #,adjustcolor("white",alpha.f = 255)
+                               )) + 
   labs(fill = "IUCN", x = "", y="") +
   facet_wrap(~ variable) +
   theme(text = element_text(size=14,family = "Times New Roman"), 
@@ -64,8 +97,8 @@ gplot(map_stack) +
   coord_equal()
 
   
-ggsave("./7.make_figs/prob_maps.tiff",width = 10, height = 5.5,dpi = 500)
-ggsave("./7.make_figs/prob_maps.jpg",width = 10, height = 5.5,dpi = 800)
+ggsave("./7.make_figs/prob_maps_IUCN.tiff",width = 10, height = 5.5,dpi = 500)
+ggsave("./7.make_figs/prob_maps_IUCN.jpg",width = 10, height = 5.5,dpi = 800)
 
 
 
