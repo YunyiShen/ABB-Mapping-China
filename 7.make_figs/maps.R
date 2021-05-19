@@ -7,6 +7,7 @@ library (rgeos)
 library(maptools)
 library(tmap)
 library(extrafont)
+library(ggnewscale)
 font_import()
 loadfonts()
 
@@ -14,16 +15,33 @@ map_30 <- raster("./1. 30km/res_map/bear_average.tif")
 map_10 <- raster("./3. fusion/Fusion/bear_mean.tif")
 map_30_res <- resample(map_30,map_10,"ngb")
 
+namesss <- c("Extend","Possible","")
+IUCN_polygon <- rgdal::readOGR("./8.IUCN/ABB_IUCN.shp")
+IUCN_polygon_tras <- spTransform(IUCN_polygon,map_10@crs)
+IUCN_polygon_fort <- fortify(IUCN_polygon_tras)
+IUCN_polygon_fort$id[IUCN_polygon_fort$hole] <- 2
+IUCN_polygon_fort$id <- as.numeric(IUCN_polygon_fort$id) + 1
+IUCN_polygon_fort$IUCN <- factor(namesss[IUCN_polygon_fort$id],levels = namesss)
+
+
+
+
+
 map_stack <- stack(map_30_res,map_10)
-names(map_stack) <- c("coarse","fine")
+names(map_stack) <- c("coarse","integrated")
 
 gplot(map_stack) +
   geom_tile(aes(fill = value)) +
-  facet_wrap(~ variable) +
   scale_fill_gradient(low = "#0072B2",
                       high =  "#E7B800",
                       na.value="transparent") +
   labs(fill = "Probability", x = "", y="") +
+  new_scale("fill") +
+  geom_polygon(data=IUCN_polygon_fort, 
+               aes(long, lat, group=group,subgroup = factor(hole),fill = IUCN),alpha = .35) +
+  scale_fill_manual(values = c("#E69F00", "#009E73",adjustcolor("white",alpha.f = 0))) + 
+  labs(fill = "IUCN", x = "", y="") +
+  facet_wrap(~ variable) +
   theme(text = element_text(size=14,family = "Times New Roman"), 
         axis.text.x = element_blank(),
         axis.text.y = element_blank(),
