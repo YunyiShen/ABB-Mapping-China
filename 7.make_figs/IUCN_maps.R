@@ -25,14 +25,19 @@ ggplot_add.new_aes <- function(object, plot, object_name) {
 
 loadfonts()
 map_10 <- raster("./3. fusion/Fusion/bear_mean.tif")
+map_crs <- CRS("+proj=aea +lat_0=0 +lon_0=105 +lat_1=25 +lat_2=47 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs")
 namesss <- c("Extend","Possible","")
 IUCN_polygon <- rgdal::readOGR("./8.IUCN/ABB_IUCN.shp")
-IUCN_polygon_tras <- spTransform(IUCN_polygon,map_10@crs)
+IUCN_polygon_tras <- spTransform(IUCN_polygon,map_crs)
 IUCN_polygon_fort <- fortify(IUCN_polygon_tras)
 IUCN_polygon_fort$id[IUCN_polygon_fort$hole] <- 2
 IUCN_polygon_fort$id <- as.numeric(IUCN_polygon_fort$id) + 1
 IUCN_polygon_fort$IUCN <- factor(namesss[IUCN_polygon_fort$id],levels = namesss)
 
+IUCN_raster <- rasterize(IUCN_polygon_tras, y)
+IUCN_raster <- IUCN_raster * (binary_map>-1)
+sum(getValues(IUCN_raster)==1, na.rm = T)
+sum(getValues((IUCN_raster==2) * (binary_map)),na.rm = T)
 
 binary_map <- raster("./3. fusion/Fusion/binary_0.39.tif")
 binary_map <- ratify( asFactor(binary_map))
