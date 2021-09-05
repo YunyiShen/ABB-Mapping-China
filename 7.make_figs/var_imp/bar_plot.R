@@ -33,7 +33,8 @@ ggplot(data = plot_data, aes(x=variable, y = mean))+
   geom_bar(stat="identity") + 
   geom_errorbar( aes(ymin=mean-sd, ymax=mean+sd), 
                  width=0.4,  alpha=0.9, size=1.3)+
-  ylab("relative importance") + 
+  ylab("Relative importance") + 
+  xlab("Predictor") + 
   theme(text = element_text(size=14,family = "Times New Roman"), 
         plot.margin = margin(.15, .15, .15, .15, "cm"))+
   theme(
@@ -44,6 +45,6 @@ ggplot(data = plot_data, aes(x=variable, y = mean))+
   )+
   coord_flip()
 
-ggsave("./7.make_figs/pred_imp.tiff",width = 8, height = 3.5,dpi = 500)
+ggsave("./7.make_figs/pred_imp.pdf",width = 8, height = 3.5)
 ggsave("./7.make_figs/pred_imp.jpg",width = 8, height = 3.5,dpi = 500)
 
