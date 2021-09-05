@@ -45,6 +45,6 @@ ggplot(data = plot_data, aes(x=variable, y = mean))+
   )+
   coord_flip()
 
-ggsave("./7.make_figs/pred_imp.pdf",width = 8, height = 3.5)
-ggsave("./7.make_figs/pred_imp.jpg",width = 8, height = 3.5,dpi = 500)
+ggsave("./7.make_figs/pred_imp.pdf",width = 8, height = 3.5, device=cairo_pdf)
+ggsave("./7.make_figs/pred_imp.png",width = 8, height = 3.5,dpi = 500, bg = "white")
 
